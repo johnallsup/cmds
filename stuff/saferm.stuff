@@ -1,0 +1,5 @@
+alias remove=/bin/rm
+rm() {
+  echo "To delete for real, use"
+  echo "remove $*"
+}

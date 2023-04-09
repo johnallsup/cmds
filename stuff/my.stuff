@@ -1,0 +1,7 @@
+if [ -f "$HOME/bin/my_stuff" ]; then
+  . "$HOME/bin/my_stuff"
+elif [ -d "$HOME/bin/my_stuff" ]; then
+  for s in "$HOME/bin/my_stuff/*.stuff"; do
+    . "$s"
+  done
+fi
