@@ -1,0 +1,18 @@
+#!/bin/bash
+C="$1"
+if [ -z "$C" ]; then
+  echo "shorthand for sudo systemctl"
+  echo "e(nable) d(isable) s(tart) S(top) r(eload) R(estart) and t for status"
+  exit 1
+fi
+shift
+case "$C" in
+  e) C=enable ;;
+  d) C=disable ;;
+  s) C=start ;;
+  S) C=stop ;;
+  r) C=reload ;;
+  R) C=restart ;;
+  t) C=status ;;
+esac
+sudo systemctl "$C" "$@"
