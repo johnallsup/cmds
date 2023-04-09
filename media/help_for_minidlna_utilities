@@ -1,0 +1,17 @@
+#!/bin/bash
+
+cat <<END
+minifind  # List existing minidlna configs
+minikill  # Kill minidlnas with name matching pattern
+minils    # List running minidlnas
+minilss   # List available configs
+miniserv  # given options of form name=value, create new config and serv current directory
+  miniserv . # infer 
+  miniserv name=MrFlibble port=9001
+ministart # find and start minidlnas with names matching pattern
+  ministart titch_a
+  ministart tit[a-c]h_a   # pattern is passed to grep -P
+minivids  # list videos -- takes either a path or a pattern to match
+  minivids ~/.minidlna/john/serv_titch_a/
+  minivids titch_a                          # matches *titch_a*
+END

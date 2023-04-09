@@ -1,0 +1,32 @@
+#!/usr/bin/perl
+
+if(@ARGV) {
+  @a=@ARGV;
+} else {
+  @a = <*.mp4>;
+}
+for $a(@a) {
+	if($a =~ m@^(.*)\.mp4$@) {
+		# Is it an .mp4 file? (should be!)
+		$b = $1;
+		$suf = "";
+		if( $b =~ m@^(.*?)-.*$@ ) {
+			# Already has details, so strip and recompute.
+			$b = $1;
+		}
+    # get all info with only a single invokation of ffprobe
+    $info = `getvinfo "$a"`;
+    $info =~ /(\S+) (\S+) (\S+) (\S+) (\S+)/;
+    $dur = $1;
+    $hms = $2;
+    $width = $3;
+    $height = $4;
+    $fps = $5;
+		$c = "$b-${height}p-$hms.mp4";
+		if( $a eq $c ) {
+			print "# No need to rename: $a\n";
+		} else {
+			print "mv -vn '$a' '$c'\n";
+		}
+	}
+}

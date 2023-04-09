@@ -1,0 +1,2 @@
+#!/bin/dash
+pgrep minidlnad | xargs ps -o pid,args

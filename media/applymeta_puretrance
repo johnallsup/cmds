@@ -1,0 +1,21 @@
+#!/bin/bash
+I="$1"
+O="$2"
+shift 2
+if [ -z "$I" -o ! -e "$I" ]; then
+  if [ -n "$I" ]; then
+    echo "File $I does not exist"
+  fi
+  echo "applymeta <infile> <outfile> <episode number> [<extra>]"
+  exit 1
+fi
+M=()
+M+=(-metadata artist=Solarstone)
+M+=(-metadata album="Pure Trance Radio")
+M+=(-metadata album_artist=Solarstone)
+title="Pure Trance Radio episode $1"
+if [ -n "$2" ]; then
+  title="$title ($2)"
+fi
+M+=(-metadata title="$title")
+ffmpeg -i "$I" -c copy "${M[@]}" "$O"

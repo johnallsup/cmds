@@ -1,0 +1,77 @@
+#!/usr/bin/env python3
+import sqlite3
+import sys, os.path, os
+from glob import glob
+args = sys.argv[1:]
+def helpexit():
+  print("""minilsf servername    or
+minilsf path/to/dbname""")
+  exit(1)
+def pad(x,n=0):
+  return (x+(" "*n))[:n]
+if len(args) == 0:
+  helpexit()
+if os.path.isfile(args[0]):
+  dbpath = args[0]
+else:
+  g = glob(os.path.expanduser(f"~/.minidlna/{os.getenv('USER')}/serv-{args[0]}-*"))
+  if len(g) > 0 and os.path.isdir(g[0]) and os.path.isfile(x := f"{g[0]}/db/files.db"):
+    dbpath = x
+  else:
+    helpexit()
+try:
+  print(f"db {dbpath}")
+  con = sqlite3.connect(dbpath)
+  cur = con.cursor()
+  media_dir = ""
+  for row in cur.execute("SELECT VALUE FROM SETTINGS WHERE KEY = 'media_dir'"):
+    media_dir = row[0]
+    print(f"media_dir {media_dir}")
+    break
+  rows = []
+  for row in cur.execute("SELECT PATH, DURATION, RESOLUTION FROM DETAILS WHERE DURATION IS NOT NULL"):
+    rows.append(row)
+  maxwidth = 0
+  plength = len(media_dir)
+  for row in rows:
+    path, dur, res = row
+    prel = path[plength+1:].lstrip("/")
+    maxwidth = max(len(prel),maxwidth)
+  for row in rows:
+    path, dur, res = row
+    prel = path[plength+1:].lstrip("/")
+    ppad = pad(prel,maxwidth)
+    if res:
+      print(f"{ppad}  {dur}  {res}")
+    else:
+      print(f"{ppad}  {dur}")
+except Exception:
+  print("Exception")
+  raise
+
+'''
+CREATE TABLE DETAILS (
+ ID INTEGER PRIMARY KEY AUTOINCREMENT,
+ PATH TEXT DEFAULT NULL,
+ SIZE INTEGER,
+ TIMESTAMP INTEGER,
+ TITLE TEXT COLLATE NOCASE,
+ DURATION TEXT,
+ BITRATE INTEGER,
+ SAMPLERATE INTEGER,
+ CREATOR TEXT COLLATE NOCASE,
+ ARTIST TEXT COLLATE NOCASE,
+ ALBUM TEXT COLLATE NOCASE,
+ GENRE TEXT COLLATE NOCASE,
+ COMMENT TEXT,
+ CHANNELS INTEGER,
+ DISC INTEGER,
+ TRACK INTEGER,
+ DATE DATE,
+ RESOLUTION TEXT,
+ THUMBNAIL BOOL DEFAULT 0,
+ ALBUM_ART INTEGER DEFAULT 0,
+ ROTATION INTEGER,
+ DLNA_PN TEXT,
+ MIME TEXT);
+'''

@@ -1,0 +1,2 @@
+#!/bin/dash
+awk "{ print \"$*\" \$0 }"

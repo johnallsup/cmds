@@ -1,0 +1,44 @@
+#!/usr/bin/env python3
+
+import psutil
+
+def handle_process(proc):
+  pid = proc.pid
+  name = proc.name()
+  cmdline = proc.cmdline()
+  cfgfile = cmdline[2]
+  media_dir = None
+  friendly_name = None
+  try:
+    with open(cfgfile) as f:
+      lines = f.read().rstrip().split("\n")
+      for line in lines:
+        if "media_dir=" in line:
+          media_dir = line.split("=")[1].rstrip()
+        if "friendly_name=" in line:
+          friendly_name = line.split("=")[1].rstrip()
+  except:
+    print(f"PID {pid}: Failed to read config file {cfgfile}")
+    return
+  if media_dir is None:
+    media_dir = "Unknown Media Dir"
+  if friendly_name is None:
+    friendly_name = "Anonymous"
+  print(f"{pid:8}  {friendly_name:12}  {media_dir}")
+
+found = False
+for proc in psutil.process_iter():
+  try:
+    processName = proc.name()
+    processID = proc.pid
+    if processName == "minidlnad":
+      found = True
+      handle_process(proc)
+  except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
+    pass
+if not found:
+  print("No minidlna's running")
+
+
+
+

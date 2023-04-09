@@ -1,0 +1,84 @@
+#!/usr/bin/perl
+
+
+sub tohms {
+  my ($t) = @_;
+  my ($d,$h,$m,$s);
+  $s = $t % 60;
+  $m = int($t / 60) % 60;
+  $h = int($t / 3600) % 24;
+  $d = int($t / (3600*24));
+  my ($x);
+  $x = "";
+  if( $d ) { $x .= "${d}d";}
+  if( $h ) { $x .= "${h}h";}
+  if( $m ) { $x .= "${m}m";}
+  if( $s ) { $x .= "${s}";}
+  if( $x =~ /^$/ ) { $x = "0"; }
+  return $x;
+}
+sub getvinfo {
+  # get info with single invokation of ffprobe
+  #$info = `getvinfo "$a"`;
+  #$info =~ /(\S+) (\S+) (\S+) (\S+) (\S+)/;
+  my ($file) = @_;
+  my ($dur,$hms,$width,$height,$fps) = (-1,-1,-1,-1,-1);
+  my (@a,@hms);
+  open(PIPE,"ffprobe '$file' 2>&1 |");
+  @a = <PIPE>;
+  close PIPE;
+  for(@a) {
+    if(/Duration:(.*),/ && $dur == -1) {
+      $_ = $1;
+      #print "Duration $1\n";
+      s/,.*$//;
+			s/\..*//;
+      @hms = split /:/;
+      $dur = 3600*int($hms[0]) + 60*int($hms[1]) + int($hms[2]);
+      $hms = tohms($dur);
+    }
+    if(/Video:.*\s(\d{2,})x(\d+)[^\d]/) {
+      $width = $1;
+      $height = $2;
+      #print "Dimensions $width $height\n";
+    }
+    if(/Video:.*\s(\d[\d\.]+) fps/) {
+      $fps = $1;
+      #print "Framerate $fps\n";
+    }
+    if( $dur != -1 && $width != -1 && $fps != -1 ) { last; }
+  }
+  return ($dur,$hms,$width,$height,$fps);
+}
+sub procfile {
+  my ($a) = @_;
+  my ($b,$c);
+	if($a =~ m@^(.*)\.mp4$@) {
+		# Is it an .mp4 file? (should be!)
+		$b = $1;
+		if( $b =~ m@^(.*?)-.*$@ ) {
+			# Already has details, so strip and recompute.
+			$b = $1;
+		}
+    # get all info with only a single invokation of ffprobe
+    my ($dur,$hms,$width,$height,$fps) = getvinfo($a);
+		$c = "$b-${hms}-${height}p.mp4";
+		if( $a eq $c ) {
+			print "# No need to rename: $a\n";
+		} else {
+			print "mv -vn '$a' '$c'\n";
+		}
+	}
+}
+
+
+
+
+if(@ARGV) {
+  @a=@ARGV;
+} else {
+  @a = <*.mp4>;
+}
+for $a(@a) {
+  procfile($a);
+}

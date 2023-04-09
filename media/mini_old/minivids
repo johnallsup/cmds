@@ -1,0 +1,62 @@
+#!/usr/bin/env python3
+usage = """minifiles <path to minidlna.conf directory>
+lists videos in database"""
+import sqlite3
+import sys,os,os.path
+args = sys.argv[1:]
+
+def main():
+  for arg in args:
+    proc(arg)
+    exit(0) # remove this later
+
+def proc(arg):
+  if not os.path.isdir(arg):
+    print(f"'{arg}' is not a directory")
+    exit(1)
+  dbname = os.path.join(arg,"db","files.db")
+  if not os.path.isfile(dbname):
+    print(f"'{arg}' does not contain a database")
+    exit(2)
+  try:
+    con = sqlite3.connect(dbname)
+    cur = con.cursor()
+    sql = 'SELECT DISTINCT title, duration, path FROM details WHERE duration IS NOT NULL'
+    cur.execute(sql)
+    rows = cur.fetchall()
+    showrows(rows)
+  except sqlite3.Error:
+    print(f"Error occurred with {arg}")
+    raise
+
+def pad(s,n):
+  return (s + (" "*n))[:n]
+
+def showrows(rows):
+  mn = 0
+  md = 0
+  for row in rows:
+    name, duration, _ = row
+    if len(name) > mn:
+      mn = len(name)
+    if len(duration) > md:
+      md = len(duration)
+  for row in rows:
+    name,duration,_ = row
+    n = pad(name,mn)
+    d = pad(duration,md)
+    print(f"{n}  {d}")
+
+
+
+
+
+
+
+
+
+
+
+
+if __name__ == "__main__":
+  main()

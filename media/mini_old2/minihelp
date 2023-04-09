@@ -1,0 +1,31 @@
+#!/bin/bash
+
+cat <<END
+minif 
+# Given a minidlna.conf or a directory containing such
+# launches minidlna with that config
+
+miniff
+shorthand for minif $HOME/.minidlna/$USER/<name>
+
+minifind
+# List existing minidlna configs
+
+minikill
+# Kill minidlnas with name matching pattern
+
+minils
+# List running minidlnas
+
+minilsf
+# List files in given minidlna database
+
+minilss
+# List available configs
+
+miniserv
+# given a directory and options (name= and port=), create new config and launch
+
+ministart
+# find and start minidlnas with names matching pattern
+END

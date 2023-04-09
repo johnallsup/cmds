@@ -1,0 +1,23 @@
+#!/bin/bash
+# kill minidlnas with name matching pattern
+killmini() {
+  local P="$1"
+  if [ -z "$P" ]; then
+    echo "minikill <pattern>"
+    exit 1
+  fi
+  if minils | grep -q "$P"; then
+    minils | while read s; do
+      if echo "$s" | awk '{ print $2 }' | grep -q "$P"; then
+        echo "Match $s"
+        pid="$(echo "$s" | awk '{ print $1 }')"
+        echo "  pid $pid"
+        kill $pid
+        echo "  killed"
+      fi
+    done
+  else
+    echo "No matches for $P"
+  fi
+}
+for s; do echo "Killing $s..."; killmini "$s"; done

@@ -1,0 +1,29 @@
+#!/usr/bin/env python3
+import csv,os,os.path,re,sys
+from tabulate import tabulate
+import urllib.request
+from io import StringIO
+
+
+url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSdHK-_5UnU7ZI9ZpLW1gfjpSWu_ELF20akpIlMmtQxbSsxk5x9Fu_Yx31ndMB0fd_kNM_mIiYMgPET/pub?output=csv"
+
+args = sys.argv[1:]
+
+data = []
+with urllib.request.urlopen(url) as response:
+    csvdata = response.read()
+    f = StringIO(csvdata.decode('utf8'))
+    reader = csv.reader(f)
+    for row in reader:
+        data.append(row)
+
+def find(key):
+    found = []
+    for row in data:
+        if re.search(key,row[0],re.I):
+            found.append(row)
+    return found
+
+for arg in args:
+    found = find(arg)
+    print(tabulate(found,tablefmt="plain"))

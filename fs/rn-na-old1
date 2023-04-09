@@ -1,0 +1,25 @@
+#!/usr/bin/perl
+
+if(@ARGV) {
+  @a=@ARGV;
+} else {
+  @a = <*.mp4>;
+}
+for $a(@a) {
+	if($a =~ m@^(.*)\.mp4$@) {
+		# Is it an .mp4 file? (should be!)
+		$b = $1;
+		if( $b =~ m@^(.*?)-.*$@ ) {
+			# Already has res/dur, so strip
+			$b = $1;
+		}
+		$r = `getvres $a`; chomp $r;
+		$s = `getvdur $a`; chomp $s;
+		$c = "$b-${r}p-$s.mp4";
+		if( $a eq $c ) {
+			print "# No need to rename: $a\n";
+		} else {
+			print "mv -vn '$a' '$c'\n";
+		}
+	}
+}

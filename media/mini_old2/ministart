@@ -1,0 +1,13 @@
+#!/bin/bash
+# Start minidlnas with config names matching pattern
+cd ~/.minidlna/$USER
+if [ -z "$1" ]; then P=.; else P="$1"; fi
+ls -1d */ | cut -f1 -d/ | grep -q "$P"
+if [ ! $? = 0 ]; then 
+  echo "No matches for $1"; 
+else
+  ls -1d */ | cut -f1 -d/ | grep "$P" | while read s; do
+    echo "Starting minidlna $s"
+    minif "$s"
+  done
+fi

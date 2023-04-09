@@ -1,0 +1,18 @@
+#!/usr/bin/perl
+
+@a = <*/*.mp4>;
+%d = ();
+for $a(@a) {
+    @b = split "/", $a;
+    $f = pop @b;
+    $d = join "/",@b;
+#    print("$a\n");
+#    print("  $d $f\n");
+    if($f =~ m@^.*_s(\d+)_.*\.mp4$@) {
+        $b = $1;
+#        print("  $d scene $b\n");
+		$r = `getvres $a`; chomp $r;
+		$s = `getvdur $a`; chomp $s;
+        print "mv '$a' '$d/$d-scene$b-${r}p-$s.mp4'\n";
+	}
+}

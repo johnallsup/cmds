@@ -1,0 +1,23 @@
+#!/usr/bin/env python3
+import csv,os,os.path,re,sys
+from tabulate import tabulate
+
+args = sys.argv[1:]
+
+pgen_data_filename = os.path.expanduser("~/pgen/pgen.csv")
+data = []
+with open(pgen_data_filename) as csvfile:
+    reader = csv.reader(csvfile)
+    for row in reader:
+        data.append(row)
+
+def find(key):
+    found = []
+    for row in data:
+        if re.search(key,row[0],re.I):
+            found.append(row)
+    return found
+
+for arg in args:
+    found = find(arg)
+    print(tabulate(found,tablefmt="plain"))

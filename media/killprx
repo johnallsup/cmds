@@ -1,0 +1,2 @@
+#!/bin/bash
+minils | grep prx | awk '{ print $1 }' | xargs kill

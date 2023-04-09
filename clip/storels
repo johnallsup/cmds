@@ -1,0 +1,4 @@
+#!/bin/bash
+[ -d "$JSTORE" ] || JSTORE="$HOME/.jstor"
+cd "$JSTORE"
+ls "$@"

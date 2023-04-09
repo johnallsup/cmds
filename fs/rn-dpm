@@ -1,0 +1,12 @@
+#!/usr/bin/perl
+
+@a = <*.mp4>;
+%d = ();
+for $a(@a) {
+    if($a =~ m@^(.*)\.mp4$@) {
+        $b = $1;
+		$r = `getvres $a`; chomp $r;
+		$s = `getvdur $a`; chomp $s;
+        print "mv '$a' '$b-${r}p-$s.mp4'\n";
+	}
+}

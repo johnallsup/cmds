@@ -1,0 +1,6 @@
+#!/bin/bash
+# List existing minidlna configs
+cd ~/.minidlna/$USER
+if [ -z "$1" ]; then P=.; else P="$1"; fi
+ls -1d */ | cut -f1 -d/ | grep "$P"
+if [ ! $? = 0 ]; then echo "No matches for $1"; fi

@@ -1,0 +1,11 @@
+#!/bin/dash
+# copy to clipboard
+if [ -n "$DISPLAY" ]; then # X11
+  cat "$@" | xsel -i -b
+elif [ -d "/Applications" ]; then # macos
+  cat "$@" | pbcopy
+elif [ -d "/cygdrive/c/cygwin64" ]; then # cygwin
+  cat "$@" > /dev/clipboard
+else
+  echo "Cannot copy as not gui" > /dev/stderr
+fi

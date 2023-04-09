@@ -1,0 +1,79 @@
+#!/usr/bin/env python3
+import sys, os, os.path
+import hashlib
+from collections import defaultdict
+
+def hash_first(filename,chunk_size=64*1024):
+  with open(filename,"rb") as f:
+    bytes = f.read(chunk_size)
+    hash = hashlib.sha256(bytes).hexdigest()
+    return hash
+
+def hash_all(filename,chunk_size=1024*1024):
+  sha = hashlib.sha256()
+  with open(filename,"rb") as f:
+    while byte_block := f.read(chunk_size):
+      sha.update(byte_block)
+    return sha.hexdigest()
+
+
+roots = sys.argv[1:]
+
+# pass 1: compile by_size
+by_size = defaultdict(list)
+for root in roots:
+  for rt, dirs, files in os.walk(root):
+    for f in files:
+      path = os.path.join(rt,f)
+      sz = os.path.getsize(path)
+      by_size[sz].append(path)
+
+candidates = []
+for sz,fs in by_size.items():
+  if len(fs) > 1:
+    candidates += fs
+print(f"{len(candidates)} candidates by size")
+if len(candidates) == 0:
+  exit(0)
+
+# pass 2: compile by_hash64k
+by_hash64k = defaultdict(list)
+for c in candidates:
+  h = hash_first(c,64*1024)
+  by_hash64k[h].append(c)
+candidates = []
+for h,fs in by_hash64k.items():
+  if len(fs) > 1:
+    candidates += fs
+print(f"{len(candidates)} candidates by hash 64k")
+if len(candidates) == 0:
+  exit(0)
+
+# pass 3: compilie by_hash1m
+by_hash1m = defaultdict(list)
+for c in candidates:
+  h = hash_first(c,1024*1024)
+  by_hash1m[h].append(c)
+candidates = []
+for h,fs in by_hash1m.items():
+  if len(fs) > 1:
+    candidates += fs
+print(f"{len(candidates)} candidates by hash 1M")
+if len(candidates) == 0:
+  exit(0)
+
+# pass 4: compile by hashall
+by_hashall = defaultdict(list)
+dups = False
+for c in candidates:
+  h = hash_all(c)
+  by_hashall[h].append(c)
+for h,fs in by_hashall.items():
+  if len(fs) > 1:
+    if not dups:
+      dups = True
+      print(f"Dups:\n=====\n\n")
+    print(f"hash {h}:")
+    for f in fs:
+      print(f"  {f}")
+

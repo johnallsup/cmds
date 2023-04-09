@@ -1,0 +1,82 @@
+#!/usr/bin/env python3
+
+#!/bin/bash
+# List available minidlna configs
+
+'''
+A="$1"
+shift
+for s in ~/.minidlna/"$USER"/serv-*/; do
+  a="$(basename "$s")"
+  b="${a#*-}"
+  c="${b%-[0-9]*}"
+  echo "$c" | grep "$A" "$@"
+done
+'''
+
+import sys,os,os.path,re
+import sqlite3
+from glob import glob
+
+def get_minidlnad_config_dir():
+  user = os.getenv("USER")
+  path = os.path.expanduser(f"~/.minidlna/{user}")
+  return path
+
+def procdb(dbname):
+  try:
+    con = sqlite3.connect(dbname)
+    cur = con.cursor()
+    sql = 'SELECT COUNT(*) FROM details WHERE duration IS NOT NULL'
+    cur.execute(sql)
+    row = cur.fetchone()
+    return row[0]
+  except sqlite3.Error:
+    print(f"Error occurred with {dbname}")
+    raise
+
+max_name_len = 0
+def find_minidlnad_confs(location,r=None):
+  global max_name_len
+  confs = glob(os.path.join(location,"serv-*/"))
+  d = {}
+  for conf in confs:
+    conf = conf.rstrip("/")
+    name = conf.split("/")[-1]
+    if r and not r.search(name):
+      continue
+    max_name_len = max(max_name_len,len(name))
+    conf_file = os.path.join(conf,"minidlna.conf")
+    conf_data = open(conf_file).read().rstrip().split("\n")
+    media_dir = next(filter(lambda t: t.startswith("media_dir"),conf_data)).split("=",1)[-1]
+    db_dir = next(filter(lambda t: t.startswith("db_dir"),conf_data)).split("=",1)[-1]
+    db_name = os.path.join(db_dir,"files.db")
+    n = procdb(db_name)
+    d[name] = [ n,  media_dir ]
+  return d
+
+def pad(x,n,s=" "):
+  return ((x+(s*n))[:n])
+
+def main():
+  args = sys.argv[1:]
+  if len(args) > 0:
+    for arg in args:
+      r = re.compile(arg)
+      procre(r)
+  else:
+    r = None
+    procre(r)
+
+def procre(r):
+  location = get_minidlnad_config_dir()
+  confs = find_minidlnad_confs(location,r)
+  for name in sorted(confs.keys()):
+    c, p = confs[name]
+    m = re.match(r"serv-(.*)-(\d+)$",name)
+    sname, sport = m.groups()
+    print(f"{pad(sname,max_name_len)} {int(sport):>5d} {c:6d} {p}")
+
+    
+if __name__ == "__main__":
+  main()

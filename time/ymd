@@ -1,0 +1,2 @@
+#!/bin/dash
+date +"%Y_%m_%d"

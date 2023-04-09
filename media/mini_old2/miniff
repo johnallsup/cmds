@@ -1,0 +1,23 @@
+#!/bin/bash
+n="$1"
+d="$HOME/.minidlna/$USER/$n"
+if [ -d "$d" ]; then
+  a=minidlna.conf
+else
+  echo "$1 is not a valid minidlnad name"
+  exit 1
+fi
+if [ -d "$d" ]; then
+  cd "$d"
+  if [ -e "$d/pid" ]; then
+    echo "$d/pid exists"
+    pid="$(<$d/pid)"
+    if [ -d "/proc/$pid" ]; then
+      echo "minidlna $f already running"
+      exit 0
+    fi
+  fi
+  if [ -f "$a" ]; then
+    /usr/sbin/minidlnad -f "$a" -P "$PWD"/pid
+  fi
+fi

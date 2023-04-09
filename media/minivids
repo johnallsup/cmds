@@ -1,0 +1,126 @@
+#!/usr/bin/env python3
+import sys,os,os.path,re
+import sqlite3
+from glob import glob
+
+usage = f"""{sys.argv[0]} <path to minidlna.conf directory> # or
+{sys.argv[0]} <name> or -g <glob pattern> or -r <regex>
+lists videos in database"""
+args = sys.argv[1:]
+
+name_re = r"serv-(.*)-(\d+)$"
+
+def helpexit(n=1):
+  print(usage)
+  exit(n)
+
+if len(args) == 0:
+  helpexit()
+
+dbs = []
+mode = "exact"
+def main():
+  global mode
+  for arg in args:
+    if arg == "-g":
+      print("setting mode to glob")
+      mode = "glob"
+    elif arg == "-r":
+      print("setting mode to regex")
+      mode = "regex"
+    else:
+      handle(arg)
+  proc()
+
+def proc():
+  for db in dbs:
+    procdb(db)
+    if len(dbs) > 1:
+      print()
+
+def testre(pattern,name):
+  #print(f"testre {pattern} {name}")
+  try:
+    a = "-".join(name.split("-")[1:-1])
+    m = re.search(pattern,a)
+    #print(f"re.search({pattern},{name})")
+    #print(f"m = {m}")
+    return m
+  except Exception:
+    print(f"Fail {name}")
+    exit()
+
+def handle(arg):
+  if os.path.isdir(arg):
+    dbname = os.path.join(arg,"db","files.db")
+    if os.path.isfile(dbname):
+      dbs.append(dbname)
+  else:
+    # try glob match
+    user = os.getenv("USER")
+    base = os.path.expanduser(f"~/.minidlna/{user}")
+    if mode == "glob":
+      print(f"matching glob mode: {arg}")
+      g = list(filter(os.path.isdir,glob(os.path.join(base,f"serv-*{arg}*"))))
+    elif mode == "exact":
+      print(f"matching exact mode: {arg}")
+      g = list(filter(os.path.isdir,glob(os.path.join(base,f"serv-{arg}-[0-9]*"))))
+    elif mode == "regex":
+      print(f"matching regex mode: {arg}")
+      g0 = list(filter(os.path.isdir,glob(os.path.join(base,f"serv-*"))))
+      g = list(filter(lambda t: testre(arg,t.split("/")[-1]),g0))
+    else:
+      print(f"Mode '{mode}' invalid")
+      exit(1)
+    if len(g) == 0:
+      print(f"No miniservs match pattern {arg}")
+      exit(1)
+    for x in g:
+      dbname = os.path.join(x,"db","files.db")
+      if os.path.isfile(dbname):
+        dbs.append(dbname)
+      
+def procdb(dbname):
+  servname = dbname.split("/")[-3]
+  try:
+    con = sqlite3.connect(dbname)
+    cur = con.cursor()
+    sql = 'SELECT DISTINCT title, duration, path FROM details WHERE duration IS NOT NULL'
+    cur.execute(sql)
+    rows = cur.fetchall()
+    t = f"Videos for {servname}"
+    print(t)
+    print("="*len(t))
+    showrows(rows,numbers=True)
+  except sqlite3.Error:
+    print(f"Error occurred with {dbname}")
+    raise
+
+def pad(s,n):
+  return (s + (" "*n))[:n]
+
+def showrows(rows,numbers=False):
+  mn = 0
+  md = 0
+  try:
+    for row in rows:
+      name, duration, _ = row
+      if len(name) > mn:
+        mn = len(name)
+      if len(duration) > md:
+        md = len(duration)
+    for i,row in enumerate(rows):
+      name,duration,_ = row
+      name = name.replace("&amp;amp;","&")
+      n = pad(name,mn)
+      d = pad(duration,md)
+      if numbers:
+        print(f"{i+1:3}: {n}  {d}")
+      else:
+        print(f"{n}  {d}")
+  except BrokenPipeError:
+    return
+
+
+if __name__ == "__main__":
+  main()

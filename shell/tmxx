@@ -1,0 +1,11 @@
+#!/bin/bash
+
+#screen -x -r "$@"
+
+if [ -z "$1" ]; then
+  tmux ls
+else
+  T="$1"
+  S="$2"
+  tmux new-session -t "$T" -s "$S"
+fi

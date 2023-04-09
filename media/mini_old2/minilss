@@ -1,0 +1,9 @@
+#!/bin/bash
+# List available minidlna configs
+
+for s in ~/.minidlna/"$USER"/serv-*/; do
+  a="$(basename "$s")"
+  b="${a#*-}"
+  c="${b%-[0-9]*}"
+  echo "$c"
+done

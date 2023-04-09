@@ -1,0 +1,42 @@
+#!/usr/bin/env python3
+
+# python implementation using av package
+# actually runs slower than the one that uses scripts
+# getvdur and getvres
+
+from glob import glob
+import av
+import re
+def main():
+  mp4s = glob("*.mp4")
+  for mp4 in mp4s:
+    domp4(mp4)
+def domp4(mp4):
+  container = av.open(mp4)
+  duration_us = container.duration
+  duration_s = int(duration_us/1000000)
+  duration_h = duration_s // 3600
+  duration_m = (duration_s // 60) % 60
+  duration_s = duration_s % 60
+  hms = ""
+  if duration_h > 0:
+    hms += f"{duration_h}h"
+  if duration_m > 0:
+    hms += f"{duration_m}m"
+  if duration_s > 0:
+    hms += f"{duration_s}"
+  if hms == "":
+    hms = "0"
+  frame = next(container.decode(video=0))
+  w,h = frame.width, frame.height
+  stub = mp4.split("-")[0]
+  ofn = f"{stub}-{h}p-{hms}.mp4"
+  if ofn == mp4:
+    print(f"# No need to rename {mp4}")
+  else:
+    print(f"# Need to rename")
+    print(f"# {mp4}")
+    print(f"# {ofn}")
+    print(f'mv -vn "{mp4}" "{ofn}"')
+if __name__ == "__main__":
+  main()
