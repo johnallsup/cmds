@@ -12,19 +12,21 @@
   fi
 }
 alias .s=.stuff
-. dircolors.stuff
-. completion.stuff
-. cd.stuff
-. mpd.stuff
-. hist.stuff
-. mvdesc.stuff
-. saferm.stuff
-. cygwin.stuff
-. antlr.stuff
-. python.stuff
-. x11.stuff
-. shopt.stuff
-. perl.stuff
+.s dircolors
+.s completion
+.s cd
+.s mpd
+.s hist
+.s mvdesc
+.s saferm
+.s cygwin
+.s antlr
+.s python
+.s x11
+.s shopt
+.s perl
+.s stuff
+.s stuff_completion
 complete -c viw catw batw lessw
 . my_prompt
 . my.stuff
