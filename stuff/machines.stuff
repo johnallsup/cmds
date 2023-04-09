@@ -1,0 +1,5 @@
+alias 2a='ssh t420a'
+alias 2b='ssh t420b'
+alias be='ssh behemoth'
+alias t7='ssh t470s1'
+

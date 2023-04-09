@@ -1,0 +1,25 @@
+.vis() { 
+  (
+    A=()
+    for s; do A+=("$s".stuff); done
+    cd /usr/jda/stuff
+    vi "${A[@]}"
+  )
+}
+_vis_completions()
+{
+  COMPREPLY=()
+  #echo
+  #echo "COMP_WORDS=" "${COMP_WORDS[@]}"
+  #echo "COMP_CWORD=" "${COMP_CWORD}"
+  #echo "COMP_LINE=" "${COMP_LINE}"
+  local CURWORD="${COMP_WORDS[COMP_CWORD]}"
+  local WORDS=()
+  while read -r line
+  do
+    WORDS+=("$line")
+  done < <(cd /usr/jda/stuff; ls *.stuff | cut -f1 -d.)
+  COMPREPLY=($(compgen -W "${WORDS[*]}" -- "$CURWORD"))
+}
+complete -F _vis_completions .vis
+    

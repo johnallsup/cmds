@@ -27,6 +27,11 @@ mkt() {
   mkdir -p "$today"
 }
 today() { 
-  local A="${1-/}"
+  local A="${1-_}"
   date +"%Y$A%m$A%d"
 }
+now() {
+  local A="${1-_}"
+  date +"%Y$A%m$A%d$A%H$A%M$A%S"
+}
+  

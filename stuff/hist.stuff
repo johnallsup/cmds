@@ -21,4 +21,4 @@ mark() {
     echo "No mark defined"
   fi
 }
-h() { history | grep "$@"; }
+h() { if [ -z "$*" ]; then history;  else history | grep "$@"; fi; }

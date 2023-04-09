@@ -1,0 +1,33 @@
+alias .w=cmdwhich
+cmdwhich() {
+  # .w cat a b c # becomes cat $(which a) $(which b) $(which c)
+  # .w head -n1 -- a b c # becomes head -n1 $(which a) $(which b) $(which c)
+  # in amy case, switches are passed through if they don't match a command
+  [ -z "$1" ] && { echo "cmdwhich CMD [cmd cmd ...] where CMD must be nonempty" ; return ; }
+  local A=()
+  local B=()
+  local S=n
+  local CMD="$1"
+  shift
+  for s; do
+    #echo "s=$s"
+    if [ "$s" = "--" ]; then
+      echo "=="
+      S=y
+      B=("${A[@]}")
+      A=()
+      continue
+    fi
+    if [ "${s:0:1}" = "-" ]; then
+      A+=("$s")
+    else
+      local W="$(which "$s")"
+      if [ -x "$W" ]; then
+        A+=("$W")
+      else
+        echo "$1 not found"
+      fi
+    fi
+  done
+  "$CMD" "${B[@]}" "${A[@]}"
+}

@@ -7,4 +7,4 @@ if ! shopt -oq posix; then
 fi
 . tmx_completion.stuff
 . newhtml_completion.stuff
-. stuff_completion.stuff
+complete -c viw catw batw lessw
