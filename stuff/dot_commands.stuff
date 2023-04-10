@@ -31,8 +31,26 @@ cmdwhich() {
   done
   "$CMD" "${B[@]}" "${A[@]}"
 }
+.wd() {
+  # which dirof
+  # first argument is what we take the which of
+  # rest is command
+  # examples
+  #   .wd bash ls -l #=> ls -l /bin
+  local A="$1"
+  local B="$(which "$A")"
+  if [ ! -e "$B" ]; then
+    echo "No $A found"
+    return
+  fi
+  local D="$(dirname "$B")"
+  shift
+  if [ "$#" = 0 ]; then
+    cd "$D"
+  else
+    "$@" "$D"
+  fi
+}
 for s in cat bat vi less; do
   alias "${s}w"=".w ${s}"
 done
-# vlc -p n ...args
-# port=n vlc ...args

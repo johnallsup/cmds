@@ -26,7 +26,6 @@ alias .s=.stuff
 .s shopt
 .s perl
 .s stuff
-.s stuff_completion
 .s my.stuff
 .s aliases
 .s dot_commands

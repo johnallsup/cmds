@@ -22,4 +22,32 @@ _vis_completions()
   COMPREPLY=($(compgen -W "${WORDS[*]}" -- "$CURWORD"))
 }
 complete -F _vis_completions .vis
-    
+
+.cds() {
+  cd /usr/jda/cmds/"$1"
+}
+_cds_completions()
+{
+  COMPREPLY=()
+  local CURWORD="${COMP_WORDS[COMP_CWORD]}"
+  local WORDS=()
+  WORDS=($(cd /usr/jda/cmds; ls -d */))
+  COMPREPLY=($(compgen -W "${WORDS[*]}" -- "$CURWORD"))
+}
+complete -F _cds_completions .cds
+
+# Stuff is defined in bash_common for chicken and
+# egg reasons.
+_stuff_completions()
+{
+  COMPREPLY=()
+  local CURWORD="${COMP_WORDS[COMP_CWORD]}"
+  local WORDS=()
+  while read -r line
+  do
+    WORDS+=("$line")
+  done < <(cd /usr/jda/stuff; ls *.stuff | cut -f1 -d.)
+  COMPREPLY=($(compgen -W "${WORDS[*]}" -- "$CURWORD"))
+}
+complete -F _stuff_completions .stuff
+complete -F _stuff_completions .s

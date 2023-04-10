@@ -1,0 +1,2 @@
+#!/bin/dash
+pp | put "$1"
