@@ -19,5 +19,5 @@ while ((I<${#CC})); do
     R) C=restart ;;
     t) C=status ;;
   esac
-  echo sudo systemctl "$C" "$@"
+  sudo systemctl "$C" "$@"
 done
