@@ -27,10 +27,11 @@ alias .s=.stuff
 .s perl
 .s stuff
 .s stuff_completion
-complete -c viw catw batw lessw
+.s my.stuff
+.s aliases
+.s dot_commands
 . my_prompt
-. my.stuff
-. aliases.stuff
+complete -c viw catw batw lessw
 
 .if . "$HOME/.cargo/env"
 PATH="$(tidypath "$PATH")"
