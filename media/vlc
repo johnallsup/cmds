@@ -1,0 +1,8 @@
+#!/bin/bash
+if [ -z "$DISPLAY" ]; then
+  echo "No DISPLAY set"
+  exit 1
+else
+  /usr/bin/vlc "$@"
+fi
+

@@ -31,3 +31,8 @@ cmdwhich() {
   done
   "$CMD" "${B[@]}" "${A[@]}"
 }
+for s in cat bat vi less; do
+  alias "${s}w"=".w ${s}"
+done
+# vlc -p n ...args
+# port=n vlc ...args
