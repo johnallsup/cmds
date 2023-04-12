@@ -1,7 +1,8 @@
 #!/bin/bash
 A="$1"
 if [ -e "$A" ]; then
-  df "$A" | awk '/dev/ { print $1 }' | xargs lsblk -f | grep -v NAME | awk '{ print $2 }'
+  df "$A" | awk 'NR == 1 { next } { print $6 }'
+  #df "$A" | awk '/dev/ { print $1 }' | xargs lsblk -f | grep -v NAME | awk '{ print $2 }'
 elif [ -z "$A" ]; then
   echo "fsof <file on fs>"
 else
