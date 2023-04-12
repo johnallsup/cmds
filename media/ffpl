@@ -1,2 +1,2 @@
 #!/bin/bash
-ffplay "$@" 2>/dev/null
+ffplay -hide_banner "$@" 2>/dev/null
