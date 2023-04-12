@@ -1,0 +1,13 @@
+#!/bin/dash
+
+do_one() {
+    local BD
+    if BD="$(guessbd "$1")"; then
+        echo Unmounting "$BD"
+        udisksctl unmount -b "$BD"
+    else
+        echo Cannot unmount "$1"
+    fi
+}
+
+for s; do do_one "$s"; done

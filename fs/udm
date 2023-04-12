@@ -1,0 +1,23 @@
+#!/bin/bash
+
+do_one() {
+    local BD
+    if BD="$(guessbd "$1")"; then
+        fstype="$(lsblk -n -o FSTYPE "$BD")"
+        echo Mounting "$BD"
+        O=()
+        if [ "$fstype" = "ntfs" ]; then
+          O+=(noatime)
+        fi
+        if [ "${#O[@]}" -ne 0 ]; then
+          opts=(-o "$(IFS=, ; echo "${O[*]}")")
+        else
+          opts=()
+        fi
+        udisksctl mount -b "$BD" "${opts[@]}"
+    else
+        echo Cannot mount "$1"
+    fi
+}
+
+for s; do do_one "$s"; done
