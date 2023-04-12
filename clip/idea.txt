@@ -1,0 +1,3 @@
+I'm thinking of having a stack per name, so e.g.
+echo hello | push X
+echo $(pop X)

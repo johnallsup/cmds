@@ -32,8 +32,10 @@ except Exception:
 try:
   template_fn = os.path.join(templates_dir,source) + "." + ext
   template = open(template_fn).read()
+  # TODO do recursive copy if template is a folder
+  # TODO allow the template to be manipulated
 except FileNotFoundError:
-  print(f"No suck template '{source}'")
+  print(f"No such template '{source}'")
   print(f"Available {ext} templates: {' '.join(templates)}")
   exit(2)
 except Exception:
