@@ -1,0 +1,2 @@
+#!/bin/bash
+sudo cpupower -c 0,1,2,3 frequency-set -d 800 -g performance
