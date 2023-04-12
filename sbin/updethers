@@ -1,0 +1,22 @@
+#!/usr/bin/env python3
+import os,sys
+if os.getenv("USER") != "root":
+  print( "execing via sudo")
+  os.execv("/usr/bin/sudo",["sudo"]+sys.argv)
+  exit(1)
+
+import subprocess
+import urllib.request
+url = "https://john.allsup.co/FlurpyBouncyFluffball/xyz/ethers"
+print(f"Fetching: {url}")
+data = urllib.request.urlopen(url).read().decode("utf8")
+rows = data.rstrip().replace("\r","").split("\n")
+try:
+  with open("/etc/ethers","wt") as f:
+    for row in rows:
+      print(row)#,file=f)
+      print(row,file=f)
+except PermissionError:
+  print("This must be run as root (try sudo updethers)")
+  exit(1)
+print("done")

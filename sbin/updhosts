@@ -1,0 +1,29 @@
+#!/usr/bin/env python3
+import os,sys
+if os.getenv("USER") != "root":
+  print( "execing via sudo")
+  os.execv("/usr/bin/sudo",["sudo"]+sys.argv)
+  exit(1)
+
+orig_hosts_txt = open("/etc/hosts").read().replace("\r","")
+orig_hosts = orig_hosts_txt.rstrip().split("\n")
+if not "#LAN" in orig_hosts:
+  print("Don't know where to start writing LAN hosts")
+  exit(1)
+i = orig_hosts.index("#LAN")
+hosts_pre = orig_hosts[:i]
+import subprocess
+import urllib.request
+url = "https://john.allsup.co/FlurpyBouncyFluffball/xyz/hosts"
+print(f"Fetching: {url}")
+data = urllib.request.urlopen(url).read().decode("utf8")
+rows = data.rstrip().replace("\r","").split("\n")
+hosts = hosts_pre + [ "#LAN", "# Everything after this is replaced by updhosts" ] + rows
+try:
+  with open("/etc/hosts","wt") as f:
+    for row in hosts:
+      print(row,file=f)
+except PermissionError:
+  print("This must be run as root (try sudo updhosts)")
+  exit(1)
+print("done")

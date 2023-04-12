@@ -3,6 +3,7 @@ import sys
 import random
 
 def main():
+  global words
   camel = False
   try:
     args = sys.argv[1:]
@@ -12,10 +13,12 @@ def main():
     n = int(args[0])
   except Exception:
     n = 4 # default
+  while n / len(words) > 1:
+    words = words + words
   random.shuffle(words)
   selection = words[:n]
   if camel:
-    print(camelCase(selection), end = "\n" if sys.stdout.isatty() else "")
+    print(camelCase(selection))
   else:
     print(" ".join(selection))
 
@@ -1109,6 +1112,7 @@ words = list(filter(lambda t: len(t) > 3,(
   "boundary",
   "bouquet",
   "boutique",
+  "bow",
   "bowl",
   "bowling",
   "box",
@@ -3960,6 +3964,7 @@ words = list(filter(lambda t: len(t) > 3,(
   "graphical",
   "graphics",
   "graphs",
+  "gras",
   "grass",
   "grateful",
   "gratis",
@@ -4727,6 +4732,8 @@ words = list(filter(lambda t: len(t) > 3,(
   "isa",
   "isaac",
   "isbn",
+  "islam",
+  "islamic",
   "island",
   "islands",
   "isle",
@@ -4958,6 +4965,8 @@ words = list(filter(lambda t: len(t) > 3,(
   "knee",
   "knew",
   "knife",
+  "knight",
+  "knights",
   "knit",
   "knitting",
   "knives",
@@ -4986,9 +4995,10 @@ words = list(filter(lambda t: len(t) > 3,(
   "label",
   "labeled",
   "labels",
-  "labour",
+  "labor",
   "laboratories",
   "laboratory",
+  "labour",
   "labs",
   "lace",
   "lack",
@@ -5407,6 +5417,8 @@ words = list(filter(lambda t: len(t) > 3,(
   "malawi",
   "malaysia",
   "maldives",
+  "male",
+  "males",
   "mali",
   "mall",
   "malpractice",
