@@ -560,7 +560,7 @@ def docmd(cmd,is_last=False):
       subprocess.run(['ncmpcpp'])
   elif c in ["wake","w"]: # wake music pc using wmus
     print(f"> waking")
-    subprocess.run(["wmus"])
+    subprocess.run(["wakey",mpdhost])
     if not is_last:
       print(f"> sleeping for 5 seconds")
       time.sleep(5)

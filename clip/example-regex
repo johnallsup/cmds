@@ -1,0 +1,14 @@
+f() { [[ "$1" =~ ^[+%-]?[a-zA-Z0-9_-]+(@[0-9]+)?$ ]] && echo yes || echo no ; }
+
+#f() { [[ "$1" =~ ^[+%-] ]] && echo yes || echo no ; }
+t() { echo "trying '$2' expecting $1, got $(f "$2")" ; }
+t yes hello
+t no yell.o
+t yes +flibble
+t yes -flibble
+t no \*flibble
+t yes flibble@45
+t yes %flibble
+
+
+## having said that, write put and get in Python, then we can make much more elaborate syntaxes.

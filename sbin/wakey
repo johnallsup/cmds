@@ -10,7 +10,7 @@ wakey machine [machine2 ...]
 args = sys.argv[1:]
 which_wakeonlan = shutil.which("wakeonlan")
 if which_wakeonlan is None:
-  host=pi3
+  host="pi3"
   for s in args:
     print(f"Waking {s} via {host}")
     run(["cli.py",host,"4009",s])
