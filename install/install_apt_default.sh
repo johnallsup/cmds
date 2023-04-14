@@ -18,3 +18,4 @@ apt install -y build-essential python3-dev libcairo2-dev libpango1.0-dev ffmpeg
 apt-get install -y neovim
 apt-get install -y rxvt-unicode
 apt-get install -y smbnetfs
+apt-get install -y imagemagick
