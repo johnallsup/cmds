@@ -1,0 +1,10 @@
+#!/bin/bash
+for s; do
+  d="${s%.zip}"
+  if [ "$d" = "$s" ]; then
+    echo "$s is not a .zip"
+    continue
+  fi
+  unzip -d "$d" "$s"
+done
+
