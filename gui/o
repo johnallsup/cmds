@@ -1,5 +1,9 @@
 #!/bin/dash
 for s; do
+  if [ -d "$s" ]; then
+    dolphin "$s" &
+    continue
+  fi
   case "$s" in
     *.html)
       google-chrome "$s";;
