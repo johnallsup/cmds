@@ -3,12 +3,14 @@ import sys
 import os
 from glob import glob
 
+# Todo -- allow templates to be directories
+# Separate command -- newf takes parameters and runs a python script
 templates_dir = os.path.expanduser("~/Templates/")
 ext = os.getenv("NEW_EXT","")
 exe = os.getenv("NEW_EXE",sys.argv[0])
 if len(ext) > 0:
   templates_dir += ext
-  print(f"{templates_dir=}")
+  #print(f"{templates_dir=}")
 def remove_ext(x):
   if len(ext) > 0 and x.endswith("."+ext):
     x = x[:-len(ext)-1]
@@ -20,13 +22,15 @@ templates = [x[len(templates_dir)+1:] for x in templates]
 try:
   source, *targets = args
   if source[0] == "-":
+    if source == "-d":
+      print(f"{templates_dir=}")
     if source == "-l":
       print("\n".join(templates))
       exit(0)
-    print(f"Unknown switch {source}")
+    print(f"Unknown switch {source}",file=sys.stderr)
     raise Exception("")
 except Exception:
-  print(f"{exe} <template> [file1 file2...]")
+  print(f"{exe} <template> [file1 file2...]",file=sys.stderr)
   exit(1)
 
 try:
