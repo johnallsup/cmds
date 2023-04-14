@@ -5,4 +5,6 @@ alias 20b='ssh t420b'
 alias be='ssh behemoth'
 alias beh='ssh behemoth'
 alias t7='ssh t470s1'
-
+for s in t420a t420b t450c t440a pi3 titch dink midge opti1; do
+  alias "$s"="ssh $s"
+done
