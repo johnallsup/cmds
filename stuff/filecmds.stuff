@@ -15,4 +15,4 @@ mvt() {
   fi
   mv -t "$T" "$@"
 }
-
+alias lsd='ls -d'
