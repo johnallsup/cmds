@@ -1,2 +1,11 @@
 #!/bin/dash
-xdg-open "$@"
+for s; do
+  case "$s" in
+    *.html)
+      google-chrome "$s";;
+    *.zip)
+      unzip -d "$(basename "$s" .zip)" "$s";;
+    *)
+      xdg-open "$@";;
+  esac
+done
