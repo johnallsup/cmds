@@ -9,6 +9,12 @@ for s; do
       google-chrome "$s";;
     *.zip)
       unzip -d "$(basename "$s" .zip)" "$s";;
+    *.png|*.jpg|*.jpeg|*.jfif|*.gif)
+      gwenview "$s" &;;
+    *.pdf)
+      okular "$s" &;;
+    *.md)
+      mdview "$s";;
     *)
       xdg-open "$@";;
   esac

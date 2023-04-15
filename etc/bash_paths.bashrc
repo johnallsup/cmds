@@ -3,7 +3,7 @@
 # for examples
 
 . /usr/jda/stuff/pathif.stuff
-for s in /usr/jda/apps /usr/jda/stuff /usr/npm/bin /usr/jda/cmds/*/ "$HOME"/bin; do
+for s in /usr/jda/apps /usr/jda/stuff /usr/npm/bin /usr/jda/cmds/*/ "$HOME/.local/bin" "$HOME"/bin; do
   if [[ "$s" =~ etc/$ ]]; then continue; fi
   pathif -p "$s"
 done

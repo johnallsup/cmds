@@ -1,1 +1,2 @@
 alias n='nvim'
+vicfg() { cd ~/.config/nvim; vi .; }
