@@ -37,6 +37,10 @@ cmdwhich() {
   # rest is command
   # examples
   #   .wd bash ls -l #=> ls -l /bin
+  if [ $# = 0 ]; then
+    cd /usr/jda/cmds
+    return
+  fi
   local A="$1"
   local B="$(which "$A")"
   if [ ! -e "$B" ]; then
