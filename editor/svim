@@ -1,0 +1,2 @@
+#!/bin/dash
+sudo update-alternatives --set vi /usr/bin/vim.basic

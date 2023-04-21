@@ -1,7 +1,7 @@
 #!/bin/dash
 
 # this was the old way -- we only need the block device when mounting -- we can just umount
-do_one() {
+do_one2() {
     local BD
     if BD="$(guessbd "$1")"; then
         echo Unmounting "$BD"
@@ -11,7 +11,7 @@ do_one() {
     fi
 }
 do_one() {
-  fsof "$1" | xargs umount
+  fsof "$1" | xargs umount || do_one2 "$1"
 }
 
 for s; do do_one "$s"; done
