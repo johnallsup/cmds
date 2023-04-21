@@ -589,7 +589,8 @@ def docmd(cmd,is_last=False):
     return docmd(["p",c[1:]]+cmd[1:])
   else: # all else gets passed straight through to mpc
     print(f"> mpc {' '.join(cmd)}")
-    subprocess.run(["mpc"]+cmd)
+    mpcmd(cmd)
+    #subprocess.run(["mpc"]+cmd)
 def main():
   cmds = [[]]
   args = sys.argv[1:]
