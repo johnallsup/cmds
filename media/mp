@@ -21,7 +21,9 @@ except ValueError:
 mpdbase = 6600
 mpdports = []
 def mpcmd(xs,**kw):
-  return run(["mpc","-h",mpdhost,"-p",str(mpdport)]+xs,**kw)
+  cmd = ["mpc","-h",mpdhost,"-p",str(mpdport)]+xs
+  #print(f"{cmd=}")
+  return run(cmd,**kw)
 def validate_port(p):
   p = int(p)
   if p < 0 or p > 399:
@@ -88,7 +90,7 @@ def getplaylists():
   return x
 def setvol(newvol):
   newvol = max(min(newvol,100),0) # clamp
-  mpcmd(["mpc","vol",str(newvol)],stdout=PIPE)
+  mpcmd(["vol",str(newvol)],stdout=PIPE)
 def newline():
   print()
 def get_width():
@@ -587,7 +589,8 @@ def docmd(cmd,is_last=False):
     return docmd(["p",c[1:]]+cmd[1:])
   else: # all else gets passed straight through to mpc
     print(f"> mpc {' '.join(cmd)}")
-    subprocess.run(["mpc"]+cmd)
+    mpcmd(cmd)
+    #subprocess.run(["mpc"]+cmd)
 def main():
   cmds = [[]]
   args = sys.argv[1:]
