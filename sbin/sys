@@ -6,6 +6,18 @@ if [ -z "$CC" ]; then
   exit 1
 fi
 shift
+if [ "$CC" = "l" -o "$CC" = "list" ]; then
+  if [ $# -gt 0 ]; then
+    args=()
+    for s; do
+      args+=(-e "$s")
+    done
+    systemctl | awk '{print $1}' | grep "${args[@]}"
+  else
+    systemctl | awk '{print $1}' | grep '\.service'
+  fi
+  exit
+fi
 I=0
 while ((I<${#CC})); do
   C="${CC:I:1}"

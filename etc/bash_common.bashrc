@@ -29,10 +29,11 @@ alias .s=.stuff
 .s my.stuff
 .s aliases
 .s dot_commands
+.s clip
 . my_prompt
 complete -c viw catw batw lessw
 
 .if . "$HOME/.cargo/env"
 PATH="$(tidypath "$PATH")"
 
-
+.if "$HOME/.bash_aliases"

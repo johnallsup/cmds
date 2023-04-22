@@ -4,6 +4,7 @@ cmdwhich() {
   # .w head -n1 -- a b c # becomes head -n1 $(which a) $(which b) $(which c)
   # in amy case, switches are passed through if they don't match a command
   [ -z "$1" ] && { echo "cmdwhich CMD [cmd cmd ...] where CMD must be nonempty" ; return ; }
+  [ $# = 1 ] && { which "$1"; return; }
   local A=()
   local B=()
   local S=n
