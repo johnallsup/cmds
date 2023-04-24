@@ -6,7 +6,7 @@ alias rm=/bin/rm
 rm -rf $TARGET/{bin,etc,stuff}
 mkdir -p /usr/jda/bin
 for s in $HERE/*/; do
-  [[ "$s" =~ ^install|stuff|etc|sbin ]] && continue
+  [[ "$s" =~ ^Install|stuff|etc|sbin ]] && continue
   for t in "$s"/*; do
     [ -x "$t" ] && ln -s "$t" "$TARGET"/bin
   done

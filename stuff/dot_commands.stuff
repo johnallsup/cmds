@@ -59,3 +59,47 @@ cmdwhich() {
 for s in cat bat vi less; do
   alias "${s}w"=".w ${s}"
 done
+
+# listing my commands
+.cmds() { # cd to cmds directory
+  local C=/usr/jda/cmds
+  if [ $# -gt 0 ]; then
+    local A="$1"
+    if [ -d "$C/$A" ]; then
+      cd "$C/$A"
+    else
+      echo "$C/$A does not exist"
+    fi
+  else
+    cd "$C"
+  fi
+}
+_cmds_completions() {
+  COMPREPLY=()
+  local CURWORD="${COMP_WORDS[COMP_CWORD]}"
+  local WORDS=()
+  while read -r line
+  do
+    WORDS+=("$line")
+  done < <(cd /usr/jda/cmds; ls -d */ | cut -f1 -d/)
+  COMPREPLY=($(compgen -W "${WORDS[*]}" -- "$CURWORD"))
+}
+alias .cs=.cmds
+complete -F _cmds_completions .cmds .cs
+
+.cmdl() { # ls cmds directory
+  pushd /usr/jda/cmds > /dev/null
+  if [ $# -gt 0 ]; then
+    local A="$1"
+    shift
+    if [ -d "$A" ]; then
+      cd "$A"
+      ls "$@"
+    else
+      echo "cmds/$A does not exist"
+    fi
+  fi
+  popd > /dev/null
+}
+alias .cl=.cmdl
+complete -F _cmds_completions .cmdl .cl
