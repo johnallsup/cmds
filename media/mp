@@ -300,6 +300,22 @@ def docmd(cmd,is_last=False):
       time.sleep(1)
     showline(f"finished sleeping")
     newline()
+  elif c[0] == "%":
+    cmd=c[1:]
+    if cmd not in ["pause","stop"]:
+      print(f"Not doing {cmd} en masse")
+      return
+    tr_range = os.getenv("TR_RANGE","0-10")
+    portsel = set()
+    try:
+      portsel.update(exp_ports(tr_range))
+    except Exception:
+      print(f"Invalid TR_RANGE: {tr_range}")
+    push_port()
+    for x in sorted(portsel):
+      set_port(x)
+      docmd([cmd])
+    pop_port()
   elif (c.isnumeric() and int(c) >= 0 and int(c) <= 399): # just a number sets the relative port
     if len(cmd) == 1:
       set_port(int(c))
