@@ -302,9 +302,16 @@ def docmd(cmd,is_last=False):
     newline()
   elif c[0] == "%":
     cmd=c[1:]
-    if cmd not in ["pause","stop"]:
+    if len(cmd) == 0:
+      return
+    if cmd[0] == "p":
+      cmd = "pause"
+    elif cmd[0] == "s":
+      cmd = "stop"
+    else:
       print(f"Not doing {cmd} en masse")
       return
+    print(f"Doing {cmd} all")
     tr_range = os.getenv("TR_RANGE","0-10")
     portsel = set()
     try:
