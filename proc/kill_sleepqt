@@ -1,2 +1,3 @@
 #!/bin/bash
-echo hello | nc -u -w1 localhost 2000
+H="${1-localhost}"
+echo hello | nc -u -w1 "$H" 2000
