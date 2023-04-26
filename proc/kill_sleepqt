@@ -1,1 +1,2 @@
+#!/bin/bash
 echo hello | nc -u -w1 localhost 2000
