@@ -7,7 +7,7 @@ for s in /usr/jda/stuff /usr/npm/bin /usr/jda/cmds/sbin /usr/jda/bin "$HOME/.loc
   if [[ "$s" =~ etc/$ ]]; then continue; fi
   pathif -p "$s"
 done
-for s in "$HOME/perl5/bin"; do
+for s in "$HOME/perl5/bin" "/usr/local/go/bin"; do
   pathif -a "$s"
 done
 PATH="$(tidypath -c -p)"
