@@ -6,7 +6,7 @@ elif [ -d "/Applications" ]; then # macos
 elif [ -d "/cygdrive/c/cygwin64" ]; then # cygwin
   paste() { cat /dev/clipboard; }
 else
-  echo "Cannot paste as not gui" > /dev/stderr
+  echo "Cannot paste as not gui" 1>&2 
 fi
 if [ -n "$1" ]; then
   paste | tee "$1"

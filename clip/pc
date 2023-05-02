@@ -7,5 +7,5 @@ elif [ -d "/Applications" ]; then # macos
 elif [ -d "/cygdrive/c/cygwin64" ]; then # cygwin
   cat "$@" > /dev/clipboard
 else
-  echo "Cannot copy as not gui" > /dev/stderr
+  echo "Cannot copy as not gui" 1>&2 
 fi

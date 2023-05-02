@@ -48,6 +48,7 @@ cmdwhich() {
     echo "No $A found"
     return
   fi
+  B="$(readlink -f "$B")" # deref links
   local D="$(dirname "$B")"
   shift
   if [ "$#" = 0 ]; then

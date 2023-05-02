@@ -1,0 +1,6 @@
+#!/bin/dash
+if [ -x "$(which nvim)" ]; then
+  nvim "$@"
+else
+  vim "$@"
+fi
