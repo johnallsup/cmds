@@ -1,2 +1,5 @@
 #!/bin/bash
+# a simple example, so if I have a bunch of miniservs I want
+# to be able to kill in unison, I put e.g. `prx` in the name.
+# This can easily be adapted.
 minils | grep prx | awk '{ print $1 }' | xargs kill
