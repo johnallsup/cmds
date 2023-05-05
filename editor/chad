@@ -1,0 +1,14 @@
+#!/bin/bash
+export NVIM_APPNAME=MyNvChad
+export CHAD="$HOME/.config/$NVIM_APPNAME"
+if [ ! -d "$CHAD" ]; then
+  echo "No $CHAD"
+  exit 1
+fi
+NVIM="$(which nvim)"
+if [ ! -x "$NVIM" ]; then
+  echo "No nvim"
+  exit 2
+fi
+NVIM="$(readlink -f "$NVIM")"
+"$NVIM" "$@"
