@@ -18,7 +18,6 @@ alias .s=.stuff
 .s mpd
 .s hist
 .s mvdesc
-.s saferm
 .s cygwin
 .s antlr
 .s python
@@ -31,6 +30,7 @@ alias .s=.stuff
 .s dot_commands
 .s clip
 .s cargo
+.s nvm
 . my_prompt
 complete -c viw catw batw lessw
 

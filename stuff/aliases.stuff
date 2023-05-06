@@ -1,2 +1,13 @@
 alias n='nvim'
 vicfg() { cd ~/.config/nvim; vi .; }
+
+# Make cp rm mv save by default
+alias remove=/bin/rm
+rm() {
+  echo "To delete for real, use"
+  echo "remove $*"
+}
+alias cpx='/bin/cp'
+alias mvx='/bin/mv'
+alias cp='cp -vn'
+alias mv='mv -vn'
