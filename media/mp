@@ -522,7 +522,7 @@ def docmd(cmd,is_last=False):
       docmd(["status"])
   elif c in ["sus","suspend","sys"]: # put the mpd computer to sleep (it needs 'sus' in its path)
     print(f"> suspending")
-    subprocess.run(["ssh",mpdhost,"sus"])
+    subprocess.run(["ssh",mpdhost,"susp"])
   elif c in ["ping"]: # ping the mpd computer
     subprocess.run(["ping",mpdhost])
   elif c in ["wsh","wash"]: # wake and ssh into the mpd computer
