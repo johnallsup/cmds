@@ -5,3 +5,4 @@ if [ -x "$(which sccache)" ]; then
 fi
 alias cargoi='cargo install'
 pathif -a "$HOME/.local/share/bob/nvim-bin"
+alias rustbook='rustup docs --book'

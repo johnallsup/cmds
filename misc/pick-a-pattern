@@ -1,0 +1,46 @@
+#!/usr/bin/env python3
+patterns = """* [Abstract Factory](AbstractFactory)
+* [[Builder]]
+* [Factory Method](FactoryMethod)
+* [[Prototype]]
+* [[Singleton]]
+## Structural Patterns
+* [[Adapter]]
+* [[Bridge]]
+* [[Composite]]
+* [[Decorator]]
+* [[Facade]]
+* [[Flyweight]]
+* [[Proxy]]
+## Behavioural Patterns
+* [Chain of Responsibility](ChainOfResponsibility)
+* [[Command]]
+* [[Interpreter]]
+* [[Iterator]]
+* [[Mediator]]
+* [[Memento]]
+* [[Observer]]
+* [[State]]
+* [[Strategy]]
+* [Template Method](TemplateMethod)
+* [[Visitor]]
+"""
+import re
+import random
+from datetime import datetime
+# filter out pattern names
+re_extract_pattern_name = re.compile(r"\[([A-Za-z ]+)\]")
+pattern_list_1 = [ re_extract_pattern_name.search(x) for x in patterns.rstrip().splitlines() ]
+pattern_list = [ m.group(1) for m in pattern_list_1 if m is not None ]
+n = len(pattern_list)
+
+now = int(datetime.now().timestamp())
+day = now // (24 * 60 * 60)
+seq = day // n
+day_in_seq = day % n
+random.seed(seq)
+patterns_with_sugar = [ (p,random.random()) for p in pattern_list ]
+patterns_in_random_order = [ x[0] for x in sorted(patterns_with_sugar,key = lambda t: t[1]) ]
+#print(patterns_in_random_order)
+print(patterns_in_random_order[day_in_seq])
+

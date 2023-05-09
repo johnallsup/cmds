@@ -31,6 +31,7 @@ alias .s=.stuff
 .s clip
 .s cargo
 .s nvm
+.s go
 . my_prompt
 complete -c viw catw batw lessw
 
