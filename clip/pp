@@ -1,5 +1,5 @@
 #!/bin/dash
-if [ -n "WAYLAND_DISPLAY" ]; then
+if [ -n "$WAYLAND_DISPLAY" ]; then
   paste() { wl-paste; }
 elif [ -n "$DISPLAY" ]; then # X11
   paste() { xsel -o -b; }
