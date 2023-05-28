@@ -1,6 +1,6 @@
 #!/bin/bash
 # copy to clipboard
-if [ -n "WAYLAND_DISPLAY" ]; then
+if [ -n "$WAYLAND_DISPLAY" ]; then
   cat "$@" | wl-copy
 elif [ -n "$DISPLAY" ]; then # X11
   cat "$@" | xsel -i -b
