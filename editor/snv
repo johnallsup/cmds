@@ -1,2 +1,2 @@
-#!/bin/dash
+#!/bin/bash
 sudo update-alternatives --set vi /usr/local/bin/nvim

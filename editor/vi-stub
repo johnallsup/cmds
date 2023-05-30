@@ -1,5 +1,5 @@
-#!/bin/dash
-if [ -x "$(which nvim)" ]; then
+#!/bin/bash
+if [ -x "$(which nvim 2>&1)" ]; then
   nvim "$@"
 else
   vim "$@"
