@@ -48,4 +48,8 @@ def main():
   #exit()
   dosleep(t)
 if __name__ == "__main__":
-  main()
+  try:
+    main()
+  except KeyboardInterrupt:
+    print("Ctrl-C")
+    exit(1)

@@ -1,11 +1,12 @@
 #!/bin/bash
 # vlp -p n ...args
 # port=n vlc ...args
-zmodload zsh/mapfile
+#zmodload zsh/mapfile
 PORT="${port-0}"
 MAXPORT=1000
 BASEPORT="${HTTP_BASE_PORT-8000}"
 TBASEPORT="${TELNET_BASE_PORT-7000}"
+export DISPLAY="${DISPLAY-:0.0}"
 if [ "$1" = "-p" ]; then
   shift
   PORT="$1"
