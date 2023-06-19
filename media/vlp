@@ -2,5 +2,8 @@
 if [[ "$OSTYPE" =~ darwin ]]; then
   exec vlp-macos "$@"
 else
+  if [ -z "$DISPLAY" ]; then
+    export DISPLAY=:0.0
+  fi
   exec vlp-linux "$@"
 fi

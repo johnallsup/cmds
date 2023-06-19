@@ -30,6 +30,10 @@ x11s() {
   fi
 }
 
+x11l() {
+  export DISPLAY=:0
+}
+
 x11d() {
   local D="$1"
   if [[ $D =~ : ]]; then

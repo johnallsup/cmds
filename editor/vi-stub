@@ -1,4 +1,7 @@
 #!/bin/bash
+if [ -d "$D" ]; then
+  cd "$D"
+fi
 if [ -x "$(which nvim 2>&1)" ]; then
   nvim "$@"
 else
