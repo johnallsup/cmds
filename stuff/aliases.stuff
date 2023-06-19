@@ -11,3 +11,9 @@ alias cpx='/bin/cp'
 alias mvx='/bin/mv'
 alias cp='cp -vn'
 alias mv='mv -vn'
+
+cpe() { local a="$1"; local e="${a##*.}"; local b="$2"; local t="${b%.${e}}.$e"; cp "$a" "$t"; }
+mve() { local a="$1"; local e="${a##*.}"; local b="$2"; local t="${b%.${e}}.$e"; mv "$a" "$t"; }
+cpxe() { local a="$1"; local e="${a##*.}"; local b="$2"; local t="${b%.${e}}.$e"; cpx "$a" "$t"; }
+mvxe() { local a="$1"; local e="${a##*.}"; local b="$2"; local t="${b%.${e}}.$e"; mvx "$a" "$t"; }
+
