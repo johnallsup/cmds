@@ -1,5 +1,5 @@
 #!/usr/bin/python
-version = "2023-02-28"
+version = "2023-06-19"
 import os, sys, subprocess, time, re, math
 from subprocess import run,PIPE
 try:
@@ -284,7 +284,15 @@ def docmd(cmd,is_last=False):
   if len(cmd) == 0:
     return
   c = cmd[0]
-  if c in ["sleep","wait"]: # sleep n -- wait for n seconds (can be float, default is 2)
+  if m := re.match(r"sl([\.\d]+)$",c):
+    a = m.group(1)
+    try:
+      t = float(a)
+    except ValueError:
+      print(f"Sleep time {a} not valid, must be a float or int")
+      return
+    return docmd(["sleep",t],is_last=is_last)
+  elif c in ["sleep","wait"]: # sleep n -- wait for n seconds (can be float, default is 2)
     if len(cmd) > 1:
       t = float(cmd[1])
     else:
