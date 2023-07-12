@@ -1,0 +1,43 @@
+#!/usr/bin/env python3
+import socket
+import sys
+from subprocess import run, PIPE
+from threading import Thread
+from time import sleep
+import re
+
+up = set()
+hostname = socket.gethostname()
+
+args = sys.argv[1:]
+if len(args) > 0:
+  s1 = int(args[0])
+else:
+  m = run(["ip","-4","addr"],stdout=PIPE)
+  a = m.stdout.decode().splitlines()
+  b = [ x for x in a if "192.168." in x ]
+  subnets = set()
+  for x in b:
+    m = re.search(r"192\.168\.(\d+)\.",x)
+    n = m.group(1)
+    subnets.add(int(n))
+
+  ss = list(sorted(subnets))
+  s1 = ss[0]
+
+def tryping(n):
+  addr = f"192.168.{s1}.{n}"
+  m = run(["ping","-c1","-w1",addr],stdout=PIPE,stderr=PIPE)
+  if m.returncode == 0:
+    up.add(addr)
+
+for i in range(2,254):
+  thread = Thread(target=lambda: tryping(i))
+  thread.start()
+
+for i in range(3):
+  print(".",end="",file=sys.stderr)
+  sys.stderr.flush()
+  sleep(1)
+print("",file=sys.stderr)
+print("\n".join(sorted(up)))

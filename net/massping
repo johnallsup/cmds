@@ -1,0 +1,71 @@
+#!/usr/bin/env python3
+from subprocess import run, PIPE
+from threading import Thread
+import os
+import sys
+import re
+
+#ping -w1 -c1 "192.168.$localnet.$s" # 2>&1 >| "$s"
+# if a host is up, the string "bytes from" will be in the stdout
+
+hosts_up = set()
+
+class TryHost:
+  def __init__(self,addr):
+    self.addr = addr
+  def __call__(self):
+    addr = self.addr
+    cmd = ["ping","-w1","-c1",addr]
+    m = run(cmd,stdout=PIPE,stderr=PIPE)
+    a = m.stdout.decode()
+    if "bytes from" in a:
+      hosts_up.add(addr)
+
+def helpexit(n=1):
+  print(f"{sys.argv[0]} <subnet number>")
+  exit(n)
+
+def main():
+  args = sys.argv[1:]
+  try:
+    if len(args) > 0:
+      arg = args[0]
+      if "." in arg:
+        xs = arg.split(".") + "0.0.0.0".split(".")
+        xs = xs[:3]
+      else:
+        xs = ["192","168",args[0]]
+    else:
+      m = run(["ip","-4","addr"],stdout=PIPE,stderr=PIPE)
+      a = m.stdout.decode().splitlines()
+      b = [ x for x in a if "192.168" in x ]
+      d = []
+      for x in b:
+        m = re.search(r"192\.168\.(\d+)\.(\d+)",x)
+        if m:
+          d.append(m.group(1))
+      if len(d) == 0:
+        print(f"Can't autodetect subnet (ip -4 addr returned nothing of use)")
+        exit(1)
+      if len(d) > 1:
+        print(f"More than one subnet found: {', '.join(d)}")
+        exit(1)
+      xs = ["192","168",d[0]]
+  except Exception:
+    helpexit()
+
+  threads = []
+  for x in range(2,253):
+    addr = ".".join(xs+[str(x)])
+    thread = Thread(target=TryHost(addr))
+    thread.start()
+    threads.append(thread)
+
+  for thread in threads:
+    thread.join()
+
+  for addr in sorted(hosts_up,key=lambda t: int(t.split(".")[-1])):
+    print(addr) 
+
+if __name__ == "__main__":
+  main()
